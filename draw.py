@@ -1,11 +1,13 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QMessageBox, QPushButton
 from tkinter import filedialog
 from logics import count
+from style import CONST_ST, CONST_ST_MS
 
 def error():
     info = QMessageBox()
     info.setWindowTitle("ОШИБКА")
     info.setText("Ошибка открытия файла")
+    info.setStyleSheet(CONST_ST_MS)
     info.exec()
 
 
@@ -14,6 +16,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         control_UI = QVBoxLayout()
         central_widget = QWidget()
+        self.setStyleSheet(CONST_ST)
         
         title = QLabel("Выберите свой файл для считывания(txt)")
         opening = QPushButton("Выбрать файл")
@@ -50,6 +53,7 @@ class MainWindow(QMainWindow):
             result_window = QMessageBox()
             result_window.setWindowTitle("Результат")
             result_window.setText(f"{res} слов в тексте")
+            result_window.setStyleSheet(CONST_ST_MS)
             result_window.exec()
             
         
