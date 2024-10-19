@@ -1,29 +1,31 @@
-from tkinter import *
-from tkinter import ttk
+from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QMessageBox, QPushButton
 from tkinter import filedialog
-from drawing_the_result import DrawRes
 from logics import count
 
 def error():
-    info = Tk()
-    
-    Label(info, text="Ошибка открытия файла, возможно не тот формат", font="30").grid(row=0, column=0, padx=10, pady=10)
-    
-    Button(info, text="OK", command=info.destroy, width=50).grid(row=1, column=0, padx=10, pady=10)
+    info = QMessageBox()
+    info.setWindowTitle("ОШИБКА")
+    info.setText("Ошибка открытия файла")
+    info.exec()
 
 
-class MainWindow:
+class MainWindow(QMainWindow):
     def __init__(self) -> None:
-        root = Tk()
-        frm = ttk.Frame(root, padding=10)
-        frm.grid
+        super().__init__()
+        control_UI = QVBoxLayout()
+        central_widget = QWidget()
         
-        ttk.Label(text="Загрузите свой текст и узнайте количество строк в нем", font=30).grid(row=0, column=0, padx=10, pady=10) 
-        ttk.Label(text="Формат должен быть txt", font="30").grid(row=1, column=0, padx=10, pady=10)
+        title = QLabel("Выберите свой файл для считывания(txt)")
+        opening = QPushButton("Выбрать файл")
         
-        ttk.Button(text="Выбрать файл", width=50, command=self.word_processing).grid(row=2, column=0 ,padx=10, pady=10)
+        opening.clicked.connect(self.word_processing)
         
-        root.mainloop()
+        control_UI.addWidget(title)
+        control_UI.addWidget(opening)
+        
+        central_widget.setLayout(control_UI)
+        
+        self.setCentralWidget(central_widget)
      
     def word_processing(self):
         try:
@@ -33,9 +35,23 @@ class MainWindow:
             )
         except:
             error()
-            
-        res = count(self.file_path)
         
-        DrawRes(res)
+        try:
+            if self.file_path == '':
+                raise
+        except:
+            error()
+        
+        res = count(self.file_path)    
+        self.draw_result(res)
+    
+    
+    def draw_result(self, res):
+            result_window = QMessageBox()
+            result_window.setWindowTitle("Результат")
+            result_window.setText(f"{res} слов в тексте")
+            result_window.exec()
+            
+        
             
         
